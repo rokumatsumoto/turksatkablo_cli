@@ -12,6 +12,7 @@ rspec_logs.json
 test_output/
 .DS_STORE
 .keys
+*.png
 
 ## Documentation cache and generated files:
 /.yardoc/
@@ -32,3 +33,5 @@ Gemfile.lock
 
 # Dotenv
 .env
+
+.byebug_history

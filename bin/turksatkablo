@@ -10,15 +10,14 @@ $LOAD_PATH.unshift lib_dir if File.directory?(lib_dir)
 
 require 'turksatkablo_cli'
 
-def main
-  TurksatkabloCli.run
+# catch control-c and exit
+trap("SIGINT") do
+  Capybara.current_session.driver.quit
+  exit!
 end
 
-if $PROGRAM_NAME == __FILE__
-  return_value = main
-  begin
-    exit(return_value)
-  rescue TypeError
-    exit(0)
-  end
-end
+TurksatkabloCli.main
+
+require 'turksatkablo_cli/online_operations'
+
+TurksatkabloCli::OnlineOperations::Cli.start(ARGV)
