@@ -7,12 +7,16 @@ module TurksatkabloCli
       # check_unknown_options!
 
       def initialize(*)
+        @session = agent.session
         super
       end
 
       desc "kota", "Kalan kota bilgisi"
       def kota
-        puts "45,26 GB AKN kaldı."
+        if TurksatkabloCli.authenticated?
+          puts @session.find(:css, "div.circle-container div.toplam span").text + " GB AKN Kaldı."
+          agent.end_session
+        end
       end
       map "k" => "kota"
 

@@ -1,4 +1,5 @@
 require 'thor'
+require 'byebug'
 
 module TurksatkabloCli
   module OnlineOperations

@@ -1,58 +1,65 @@
 require 'singleton'
-require 'ezcrypto'
+require 'openssl'
 require 'yaml'
-
-require 'turksatkablo_cli/online_operations/agent'
 
 module TurksatkabloCli
   module OnlineOperations
     class Auth
       include Singleton
       include Helpers
-      attr_reader :path, :login_type
+      attr_reader :path, :login_type, :login_data
 
       FILE_NAME = '.turksatkablo'.freeze
+      KEY = "m\x13\x95\xBE6\x81\xEEN\xE6\xDC\xA0\x83K\xE8X2\a\xD7\xB2\x94L\xF2\xEC\xF9\x80\x9F_\xDB\xDB\xD05\v".freeze
+      private_constant :KEY
 
       def initialize
         @path = File.join(File.expand_path('~'), FILE_NAME)
-        @data = get
-
+        @login_data = get
       end
+
 
       def get
         return read_file if File.exists?(@path)
         begin
           if agent.get_login
 
-            #     # giris basariliysa dosyaya bilgileri kaydet ve burdan cik
-            #     result = {:login_type => chosen.to_s, :username => username.to_s, :password => password.to_s}
-            #      # save_file(result) if @path
+            login_info = { :radio_btn_value => agent.radio_btn_value, :username => agent.username,
+             :password => agent.password }
 
-          else
-          end
-        rescue Exception => e
-
+             save_file(login_info) if @path
+             puts "Bilgileriniz bilgisayarınızda şifrelenerek saklandı." if File.exists?(@path)
+             login_info
+           end
+         rescue Exception => e
+          puts "Bir sorun oluştu."
         end
-      ensure
-        agent.screenshot
-        agent.end_session
       end
 
       def read_file
-        YAML.load(encryption.decrypt64(File.read(@path)))
+        YAML.load(decryption(File.read(@path)))
       end
 
       private
-      def self.save_file(hash)
-        File.open(@path, 'w') { |file| file.write encryption.encrypt64(YAML.dump(hash)) }
+      def save_file(hash)
+        File.open(@path, 'w') { |file| file.write encryption(YAML.dump(hash))  }
       end
 
-      def self.encryption
-        EzCrypto::Key.with_password(%|68DcDQxB/3g^k6Q{e6XVVtqDk,rGQ?sQcu3tfFJYv[Rade7Tw7uZXCR9B$+X{=jq|, "saltyy")
-        end
-
-
+      def encryption(data)
+        cipher = OpenSSL::Cipher::AES256.new :CBC
+        cipher.encrypt
+        cipher.key = KEY
+        cipher.update(data) + cipher.final
       end
+
+      def decryption(data)
+        decipher = OpenSSL::Cipher::AES256.new :CBC
+        decipher.decrypt
+        decipher.key = KEY
+        decipher.update(data) + decipher.final
+      end
+
     end
-
   end
+
+end

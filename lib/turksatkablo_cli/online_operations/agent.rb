@@ -6,18 +6,23 @@ module TurksatkabloCli
     class Agent
       include Helpers
       attr_accessor :login_choose, :username, :password, :radio_btn_value,
-      :fail_login_attempt
+      :fail_login_attempt, :session
 
       WEB_SITE = 'https://online.turksatkablo.com.tr/'.freeze
       WEB_SITE_SUCCESS ='https://online.turksatkablo.com.tr/hosgeldiniz.aspx'.freeze
 
       def initialize
-        @session ||= Capybara::Session.new(:poltergeist)
+        @session =  Capybara::Session.new(:poltergeist)
         @login_type = { musterino: {username_label: "Müşteri No", password_label: "Şifre", radio_btn_value: 1},
         tckimlikno: {username_label: "T.C. Kimlik No", password_label: "Şifre",  radio_btn_value: 2},
         email: {username_label: "E-mail", password_label: "Şifre", radio_btn_value: 4},
         ceptelefonu: {username_label: "Cep Telefonu (Başında 0 olmadan 10 haneli olmalı.)", password_label: "Şifre", radio_btn_value: 5} }
         @fail_login_attempt = 0
+
+      end
+
+      def web_site
+        Agent::WEB_SITE
       end
 
       def get_login
@@ -37,42 +42,44 @@ module TurksatkabloCli
             self.radio_btn_value = @login_type[chosen][:radio_btn_value]
 
             user_authenticated?
-           end
-         end
-       end
-
-       def end_session
-         @session.driver.quit
-         @session = nil
-       end
-
-       def screenshot
-         @session.save_screenshot
-       end
-
-       def retry_authenticate
-        if (@fail_login_attempt == 0)
-          puts "Türksat Kablo Online İşlemler sayfasına şuan ulaşılamıyor, tekrar deniyoruz..."
-          @fail_login_attempt = 1
-
-          user_authenticated?
-        else
-          puts "Türksat Kablo Online İşlemler sayfasına şuan ulaşılamıyor."
-          @fail_login_attempt = 0
-
-          false
+          end
         end
-       end
+      end
 
-       def user_authenticated?
-        begin
-        visit_status = @session.visit(WEB_SITE)
-          if visit_status["status"] == 'success' && @session.current_url == WEB_SITE
+
+
+      def end_session
+       @session.driver.quit
+       @session = nil
+     end
+
+     def screenshot
+       @session.save_screenshot
+     end
+
+     def retry_authenticate
+      if (@fail_login_attempt == 0)
+        puts "Türksat Kablo Online İşlemler sayfasına şuan ulaşılamıyor, tekrar deniyoruz..."
+        @fail_login_attempt = 1
+
+        user_authenticated?
+      else
+        puts "Türksat Kablo Online İşlemler sayfasına şuan ulaşılamıyor."
+        @fail_login_attempt = 0
+
+        false
+      end
+    end
+
+    def user_authenticated?
+      begin
+        if @session.current_url != Agent::WEB_SITE_SUCCESS
+          visit_status = @session.visit(Agent::WEB_SITE)
+          if visit_status["status"] == 'success' && @session.current_url == Agent::WEB_SITE
             @fail_login_attempt = 0
-            puts "#{WEB_SITE} adresine erişim başarılı. Giriş yapılıyor..."
+            puts "#{Agent::WEB_SITE} adresine erişim başarılı. Giriş yapılıyor..."
 
             @session.find(:css, "div.radio-container div:nth-child(#{self.radio_btn_value}) > label").click
-
             kullanici_id = @session.find('input#KullaniciID')
             kullanici_id.send_keys(self.username)
 
@@ -81,9 +88,10 @@ module TurksatkabloCli
 
             @session.find_link(id: 'Button1').click
 
-            if @session.current_url == WEB_SITE_SUCCESS
+            if @session.current_url == Agent::WEB_SITE_SUCCESS
               puts "\nGiriş işlemi başarılı"
               add_line
+
 
               true
             else
@@ -95,11 +103,20 @@ module TurksatkabloCli
           else
             retry_authenticate
           end
-        rescue Exception => e
-          retry_authenticate
+        else
+          true
         end
-      end
 
+      rescue Exception => e
+        retry_authenticate
+      end
     end
+
+
+
+
+
+
   end
+end
 end

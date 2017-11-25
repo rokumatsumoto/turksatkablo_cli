@@ -17,7 +17,3 @@ trap("SIGINT") do
 end
 
 TurksatkabloCli.main
-
-require 'turksatkablo_cli/online_operations'
-
-TurksatkabloCli::OnlineOperations::Cli.start(ARGV)

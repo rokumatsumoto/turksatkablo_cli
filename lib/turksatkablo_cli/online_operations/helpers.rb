@@ -1,6 +1,6 @@
 require 'open3'
 require 'net/ping'
-require 'ruby-progressbar'
+require 'byebug'
 
 module TurksatkabloCli
   module OnlineOperations
@@ -20,16 +20,21 @@ module TurksatkabloCli
       end
 
       def add_commands
-        Dir[File.expand_path(File.join('../..', 'online_operations', 'commands', '*.rb'), __FILE__)].each do |file|
-          require file
+
+        begin
+          Dir[File.expand_path(File.join('../..','online_operations', 'commands', '*.rb'), __FILE__)].each do |file|
+            require file
+          end
+        rescue Exception => e
         end
+
       end
 
       def agent
-        unless @agent
-          @agent = TurksatkabloCli::OnlineOperations::Agent.new
+        unless $agent
+          $agent = TurksatkabloCli::OnlineOperations::Agent.new
         end
-        @agent
+        $agent
       end
 
       def add_line
