@@ -32,6 +32,10 @@ module TurksatkabloCli
         @agent
       end
 
+      def add_line
+        puts "\n"
+      end
+
    end
  end
 end
