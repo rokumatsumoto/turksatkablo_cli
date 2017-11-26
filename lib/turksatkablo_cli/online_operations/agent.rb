@@ -8,9 +8,6 @@ module TurksatkabloCli
       attr_accessor :login_choose, :username, :password, :radio_btn_value,
       :fail_login_attempt, :session
 
-      WEB_SITE = 'https://online.turksatkablo.com.tr/'.freeze
-      WEB_SITE_SUCCESS ='https://online.turksatkablo.com.tr/hosgeldiniz.aspx'.freeze
-
       def initialize
         @session =  Capybara::Session.new(:poltergeist)
         @login_type = { musterino: {username_label: "Müşteri No", password_label: "Şifre", radio_btn_value: 1},
@@ -21,8 +18,29 @@ module TurksatkabloCli
 
       end
 
-      def web_site
-        Agent::WEB_SITE
+      def authenticated?
+        begin
+          if agent.session.current_url != Enums::BASE_URL_SUCCESS
+            auth = TurksatkabloCli::OnlineOperations::Auth.instance
+            set_login_data(auth)
+
+            if agent.session.current_url != Enums::BASE_URL
+              if agent.user_authenticated?
+                true
+              else
+                false
+              end
+            else
+              true
+            end
+
+          else
+            true
+          end
+        rescue Exception => e
+          false
+        end
+
       end
 
       def get_login
@@ -73,11 +91,11 @@ module TurksatkabloCli
 
     def user_authenticated?
       begin
-        if @session.current_url != Agent::WEB_SITE_SUCCESS
-          visit_status = @session.visit(Agent::WEB_SITE)
-          if visit_status["status"] == 'success' && @session.current_url == Agent::WEB_SITE
+        if @session.current_url != Enums::BASE_URL_SUCCESS
+          visit_status = @session.visit(Enums::BASE_URL)
+          if visit_status["status"] == 'success' && @session.current_url == Enums::BASE_URL
             @fail_login_attempt = 0
-            puts "#{Agent::WEB_SITE} adresine erişim başarılı. Giriş yapılıyor..."
+            puts "#{Enums::BASE_URL} adresine erişim başarılı. Giriş yapılıyor..."
 
             @session.find(:css, "div.radio-container div:nth-child(#{self.radio_btn_value}) > label").click
             kullanici_id = @session.find('input#KullaniciID')
@@ -88,7 +106,7 @@ module TurksatkabloCli
 
             @session.find_link(id: 'Button1').click
 
-            if @session.current_url == Agent::WEB_SITE_SUCCESS
+            if @session.current_url == Enums::BASE_URL_SUCCESS
               puts "\nGiriş işlemi başarılı"
               add_line
 
@@ -112,10 +130,17 @@ module TurksatkabloCli
       end
     end
 
+     private
+     def set_login_data(auth)
+       if auth.login_data.kind_of?(Hash)
+        agent.username = auth.login_data[:username]
+        agent.password = auth.login_data[:password]
+        agent.radio_btn_value = auth.login_data[:radio_btn_value]
 
+      else
 
-
-
+      end
+    end
 
   end
 end

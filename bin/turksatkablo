@@ -16,4 +16,11 @@ trap("SIGINT") do
   exit!
 end
 
+
+at_exit{
+  # cleanup temp files
+  # close open connections
+  Capybara.current_session.driver.quit
+}
+
 TurksatkabloCli.main
