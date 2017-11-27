@@ -2,6 +2,7 @@ require 'singleton'
 require 'openssl'
 require 'yaml'
 
+
 module TurksatkabloCli
   module OnlineOperations
     class Auth

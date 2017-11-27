@@ -1,5 +1,5 @@
 require 'highline'
-require 'byebug'
+
 
 module TurksatkabloCli
   module OnlineOperations

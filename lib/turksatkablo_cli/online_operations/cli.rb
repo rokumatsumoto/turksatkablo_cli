@@ -1,4 +1,3 @@
-require 'byebug'
 require 'terminal-table'
 
 
@@ -21,7 +20,7 @@ module TurksatkabloCli
         if agent.authenticated?
           invoke :kota
           invoke :musterino
-          invoke :hizmetler
+          invoke :anlikborc
         end
       end
       map "o" => "ozet"
@@ -43,29 +42,77 @@ module TurksatkabloCli
       end
       map "mn" => "musterino"
 
-      desc "hizmetler", "Mevcut hizmetler - kısa kodu h"
-      def hizmetler
+      desc "hizmet", "Mevcut hizmetler - kısa kodu h"
+      def hizmet
         if agent.authenticated?
-          @session.find_link(id: 'menu_menu_5').click # HİZMET İŞLEMLERİ
-          if @session.current_url == Enums::SERVICE_OPERATIONS_URL
+          visit_status = @session.visit(Enums::SERVICE_OPERATIONS_URL)
+          if visit_status["status"] == 'success' && @session.current_url == Enums::SERVICE_OPERATIONS_URL
+
+            # TODO: REFACTOR table helper
 
             rows = []
             services_td_list = @session.all(:css, 'table#hizmetTable tr td:nth-child(-n+4)').map(&:text)
 
-            (0..services_td_list.size).step(4) do |n|
-              rows << services_td_list[n...n+4]
+            if services_td_list.size > 0
+              (0..services_td_list.size).step(4) do |n|
+                rows << services_td_list[n...n+4]
+              end
+
+              table = Terminal::Table.new :headings => [Enums::HIZMET, Enums::HIZMET_TURU, Enums::HIZMET_DURUMU, Enums::TARIFE_TIPI], :rows => rows
+              puts table
+            else
+              puts "Mevcut bir hizmetiniz bulunmamaktadır."
             end
 
-            table = Terminal::Table.new :headings => [Enums::HIZMET, Enums::HIZMET_TURU, Enums::HIZMET_DURUMU, Enums::TARIFE_TIPI], :rows => rows
-            puts table
-
           else
-            puts "Hizmer İşlemleri menüsüne şuan ulaşılamıyor."
+            puts "Hizmet İşlemleri menüsüne şuan ulaşılamıyor."
           end
 
         end
       end
-      map "h" => "hizmetler"
+      map "h" => "hizmet"
+
+      desc "kampanya", "Kampanya bilgileri - kısa kodu ka"
+      def kampanya
+        if agent.authenticated?
+          visit_status = @session.visit(Enums::CAMPAIGN_INFO_URL)
+          if visit_status["status"] == 'success' && @session.current_url == Enums::CAMPAIGN_INFO_URL
+
+            # TODO: REFACTOR table helper
+            rows = []
+            campaigns_td_list = @session.all(:css, 'table.table tr td').map(&:text)
+
+            if campaigns_td_list.size > 0
+              (0..campaigns_td_list.size).step(4) do |n|
+                rows << campaigns_td_list[n...n+4]
+              end
+
+              table = Terminal::Table.new :headings => [Enums::HIZMET_ID, Enums::KAMPANYA_ADI, Enums::TAAHHUT_BAS_TRH, Enums::TAAHHUT_BIT_TRH], :rows => rows
+              puts table
+            else
+              puts "Mevcut bir kampanyanız bulunmamaktadır."
+            end
+
+          else
+            puts "Kampanya Bilgileri menüsüne şuan ulaşılamıyor."
+          end
+
+        end
+      end
+      map "ka" => "kampanya"
+
+      desc "anlikborc", "Anlık borç - kısa kodu b"
+      def anlikborc
+        if agent.authenticated?
+          visit_status = @session.visit(Enums::INSTANT_DEBT_URL)
+          if visit_status["status"] == 'success' && @session.current_url == Enums::INSTANT_DEBT_URL
+           @session.find(:css, "div.anlik-borc").all("p, h1, small").map(&:text).each { |val| puts val }
+         else
+          puts "Anlık Borç menüsüne şuan ulaşılamıyor."
+        end
+      end
+    end
+    map "b" => "anlikborc"
 
       # default_task :ozet
 

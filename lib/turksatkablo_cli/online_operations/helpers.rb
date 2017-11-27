@@ -1,6 +1,6 @@
 require 'open3'
 require 'net/ping'
-require 'byebug'
+
 
 module TurksatkabloCli
   module OnlineOperations

@@ -5,7 +5,6 @@ require 'turksatkablo_cli/base'
 require 'turksatkablo_cli/online_operations/agent'
 require 'turksatkablo_cli/online_operations/auth'
 require "init/poltergeist"
-require 'byebug'
 
 
 module TurksatkabloCli
