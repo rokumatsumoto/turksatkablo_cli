@@ -1,5 +1,6 @@
 Turksat Kablo CLI :black_medium_square:
 =================
+[![Gem Version](https://badge.fury.io/rb/turksatkablo_cli.svg)](https://badge.fury.io/rb/turksatkablo_cli)
 
 A command-line interface for the Turksat Kablo Online Islemler - https://online.turksatkablo.com.tr/
 
@@ -10,7 +11,8 @@ A command-line interface for the Turksat Kablo Online Islemler - https://online.
 
 ## Setup
 
-turksatkablo_cli supports Ruby (MRI) 2.0+
+turksatkablo_cli is built with Ruby, so you'll need a working Ruby 2.1.0>= environment to use it. You can find Ruby installation instructions [here](https://www.ruby-lang.org/en/installation/).
+
 
 1. Install via rubygems
 

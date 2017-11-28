@@ -26,6 +26,8 @@ Gem::Specification.new do |spec|
   # spec.files         = `git ls-files -z`.split("\x0").reject do |f|
   #   f.match(%r{^(test|spec|features)/})
   # end
+
+  spec.required_ruby_version = '>= 2.1.0'
   spec.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   spec.files         = `git ls-files`.split("\n")
   spec.require_paths = ["lib"]
@@ -34,6 +36,9 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "thor", '~> 0.20.0'
   spec.add_runtime_dependency 'highline', '~> 1.7', '>= 1.7.8'
+  spec.add_runtime_dependency 'nokogiri', '1.7.1'
+  spec.add_runtime_dependency 'rack', '1.6.8'
+  spec.add_runtime_dependency 'rack-test', '0.7.0'
   spec.add_runtime_dependency 'net-ping', '~> 2.0', '>= 2.0.2'
   spec.add_runtime_dependency 'capybara', '~> 2.16', '>= 2.16.1'
   spec.add_runtime_dependency 'poltergeist', '~> 1.16', '>= 1.16.0'
