@@ -3,7 +3,10 @@ Turksat Kablo CLI :black_medium_square:
 
 A command-line interface for the Turksat Kablo Online Islemler - https://online.turksatkablo.com.tr/
 
-![Alt Text](turksatkablo_cli.gif)
+
+## Demo
+
+[![asciicast](https://asciinema.org/a/O5JIljKHQjTe3cRZNDLBngJXS.png)](https://asciinema.org/a/O5JIljKHQjTe3cRZNDLBngJXS)
 
 ## Setup
 
