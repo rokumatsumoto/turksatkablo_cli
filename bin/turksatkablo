@@ -20,7 +20,11 @@ end
 at_exit{
   # cleanup temp files
   # close open connections
-  Capybara.current_session.driver.quit
+  begin
+    Capybara.current_session.driver.quit
+  rescue Exception => e
+    abort "turksatkablo_cli requires phantomjs https://github.com/rokumatsumoto/turksatkablo_cli#setup"
+  end
 }
 
 TurksatkabloCli.main

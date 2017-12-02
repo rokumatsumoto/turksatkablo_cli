@@ -40,3 +40,15 @@ turksatkablo kotadetay       # Son 3 ayın günlük takibi v.s
 turksatkablo musterino       # Müşteri no - kısa kodu mn
 turksatkablo ozet            # Hizmetler genel durum - kısa kodu o
 ```
+
+### Changelog
+
++ 0.1.4 – Fix retry_authenticate and authenticated? methods, login details could not be saved when base url was not reachable
++ 0.1.3 – Modernize multiple classes, add `ozet`, `hizmetler`, `musterino`, `kampanya`, `anlikborc` commands
++ 0.1.2 – Modernize Agent and Auth classes, ability to save user's encrypted login details, add `kota` command.
++ 0.1.1 – Build app skeleton, implement basic authentication
++ 0.1.0 - Initial version.
+
+### Contributing
+
+turksatkablo_cli is open source, and contributions are very welcome!

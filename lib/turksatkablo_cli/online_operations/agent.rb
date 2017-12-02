@@ -1,12 +1,11 @@
 require 'highline'
 
-
 module TurksatkabloCli
   module OnlineOperations
     class Agent
       include Helpers
       attr_accessor :login_choose, :username, :password, :radio_btn_value,
-      :fail_login_attempt, :session
+      :fail_login_attempt, :session, :has_logged_in, :auth
 
       def initialize
         @session =  Capybara::Session.new(:poltergeist)
@@ -15,27 +14,26 @@ module TurksatkabloCli
         email: {username_label: "E-mail", password_label: "Şifre", radio_btn_value: 4},
         ceptelefonu: {username_label: "Cep Telefonu (Başında 0 olmadan 10 haneli olmalı.)", password_label: "Şifre", radio_btn_value: 5} }
         @fail_login_attempt = 0
+        @has_logged_in = false
+      end
 
+      def has_logged_in?
+        agent.has_logged_in
       end
 
       def authenticated?
         begin
-          if agent.session.current_url != Enums::BASE_URL_SUCCESS
+          if has_logged_in?
+            true
+          else
             auth = TurksatkabloCli::OnlineOperations::Auth.instance
             set_login_data(auth)
 
-            if agent.session.current_url != Enums::BASE_URL
-              if agent.user_authenticated?
-                true
-              else
-                false
-              end
-            else
+            if has_logged_in?
               true
+            else
+              user_authenticated? if @fail_login_attempt == 0
             end
-
-          else
-            true
           end
         rescue Exception => e
           false
@@ -65,7 +63,6 @@ module TurksatkabloCli
       end
 
 
-
       def end_session
        @session.driver.quit
        @session = nil
@@ -76,53 +73,49 @@ module TurksatkabloCli
      end
 
      def retry_authenticate
-      if (@fail_login_attempt == 0)
+      if @fail_login_attempt == 0
         puts "Türksat Kablo Online İşlemler sayfasına şuan ulaşılamıyor, tekrar deniyoruz..."
         @fail_login_attempt = 1
 
         user_authenticated?
       else
         puts "Türksat Kablo Online İşlemler sayfasına şuan ulaşılamıyor."
-        @fail_login_attempt = 0
-
         false
       end
     end
 
     def user_authenticated?
       begin
-        if @session.current_url != Enums::BASE_URL_SUCCESS
-          visit_status = @session.visit(Enums::BASE_URL)
-          if visit_status["status"] == 'success' && @session.current_url == Enums::BASE_URL
-            @fail_login_attempt = 0
-            puts "#{Enums::BASE_URL} adresine erişim başarılı. Giriş yapılıyor..."
 
-            @session.find(:css, "div.radio-container div:nth-child(#{self.radio_btn_value}) > label").click
-            kullanici_id = @session.find('input#KullaniciID')
-            kullanici_id.send_keys(self.username)
+        visit_status = @session.visit(Enums::BASE_URL)
 
-            kullanici_sifre = @session.find('input#KullaniciSifre')
-            kullanici_sifre.send_keys(self.password)
+        if visit_status["status"] == 'success' && @session.current_url == Enums::BASE_URL
+          @fail_login_attempt = 0
+          puts "#{Enums::BASE_URL} adresine erişim başarılı. Giriş yapılıyor..."
 
-            @session.find_link(id: 'Button1').click
+          @session.find(:css, "div.radio-container div:nth-child(#{self.radio_btn_value}) > label").click
+          kullanici_id = @session.find('input#KullaniciID')
+          kullanici_id.send_keys(self.username)
 
-            if @session.current_url == Enums::BASE_URL_SUCCESS
-              puts "\nGiriş işlemi başarılı"
-              add_line
+          kullanici_sifre = @session.find('input#KullaniciSifre')
+          kullanici_sifre.send_keys(self.password)
 
+          @session.find_link(id: 'Button1').click
 
-              true
-            else
-              puts "\nGiriş bilgileriniz hatalı, kontrol ederek tekrar deneyiniz."
-              add_line
+          if @session.current_url == Enums::BASE_URL_SUCCESS
+            puts "\nGiriş işlemi başarılı"
+            add_line
+            self.has_logged_in = true
 
-              get_login
-            end
+            true
           else
-            retry_authenticate
+            puts "\nGiriş bilgileriniz hatalı, kontrol ederek tekrar deneyiniz."
+            add_line
+
+            get_login
           end
         else
-          true
+          retry_authenticate
         end
 
       rescue Exception => e
@@ -130,15 +123,20 @@ module TurksatkabloCli
       end
     end
 
-     private
-     def set_login_data(auth)
-       if auth.login_data.kind_of?(Hash)
+    private
+    def set_login_data(auth)
+      if auth.login_data.kind_of?(Hash) && !has_login_data?
         agent.username = auth.login_data[:username]
         agent.password = auth.login_data[:password]
         agent.radio_btn_value = auth.login_data[:radio_btn_value]
+      end
+    end
 
+    def has_login_data?
+      if agent.username.nil? || agent.password.nil? || agent.radio_btn_value.nil?
+        false
       else
-
+        true
       end
     end
 

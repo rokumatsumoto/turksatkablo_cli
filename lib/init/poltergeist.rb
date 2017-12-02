@@ -5,7 +5,11 @@ require 'capybara/poltergeist'
 # See more options at https://github.com/teampoltergeist/poltergeist#customization
 options = { js_errors: false, phantomjs_options: ['--load-images=no', '--ignore-ssl-errors=yes'] }
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, options)
+  begin
+    Capybara::Poltergeist::Driver.new(app, options)
+  rescue Exception => e
+    abort "turksatkablo_cli requires phantomjs https://github.com/rokumatsumoto/turksatkablo_cli#setup"
+  end
 end
 
 # Configure Capybara to use Poltergeist as the driver

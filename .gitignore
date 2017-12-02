@@ -33,5 +33,3 @@ Gemfile.lock
 
 # Dotenv
 .env
-
-.byebug_history
