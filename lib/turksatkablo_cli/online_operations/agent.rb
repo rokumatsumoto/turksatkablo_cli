@@ -5,7 +5,7 @@ module TurksatkabloCli
     class Agent
       include Helpers
       attr_accessor :login_choose, :username, :password, :radio_btn_value,
-      :fail_login_attempt, :session, :has_logged_in, :auth
+      :fail_login_attempt, :session, :has_logged_in
 
       def initialize
         @session =  Capybara::Session.new(:poltergeist)

@@ -17,7 +17,6 @@ module TurksatkabloCli
 
       def initialize
         @path = File.join(File.expand_path('~'), FILE_NAME)
-
         @login_data = get
       end
 

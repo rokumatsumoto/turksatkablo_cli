@@ -43,7 +43,7 @@ turksatkablo ozet            # Hizmetler genel durum - kısa kodu o
 
 ### Changelog
 
-+ 0.1.4 – Fix retry_authenticate and authenticated? methods, login details could not be saved when base url was not reachable
++ 0.1.4 – Fix retry_authenticate and authenticated? methods (login details could not be saved after the retry_authenticate method)
 + 0.1.3 – Modernize multiple classes, add `ozet`, `hizmetler`, `musterino`, `kampanya`, `anlikborc` commands
 + 0.1.2 – Modernize Agent and Auth classes, ability to save user's encrypted login details, add `kota` command.
 + 0.1.1 – Build app skeleton, implement basic authentication
