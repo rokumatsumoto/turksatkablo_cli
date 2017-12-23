@@ -36,8 +36,8 @@ module TurksatkabloCli
       end
 
       def self.check_ruby_version(ruby_version = RUBY_VERSION)
-        if ruby_version < '2.1.0'
-          abort "turksatkablo_cli requires Ruby 2.1.0 or higher"
+        if ruby_version < '2.2.0'
+          abort "turksatkablo_cli requires Ruby 2.2.0 or higher"
         else
           ruby_version
         end

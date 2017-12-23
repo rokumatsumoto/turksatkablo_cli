@@ -11,7 +11,7 @@ A command-line interface for the Turksat Kablo Online Islemler - https://online.
 
 ## Setup
 
-turksatkablo_cli is built with Ruby, so you'll need a working Ruby 2.1.0>= environment to use it. You can find Ruby installation instructions [here](https://www.ruby-lang.org/en/installation/).
+turksatkablo_cli is built with Ruby, so you'll need a working Ruby 2.2.0>= environment to use it. You can find Ruby installation instructions [here](https://www.ruby-lang.org/en/installation/).
 
 
 1. Install via rubygems
@@ -41,13 +41,18 @@ turksatkablo musterino       # Müşteri no - kısa kodu mn
 turksatkablo ozet            # Hizmetler genel durum - kısa kodu o
 ```
 
-### Changelog
-
+## Changelog
++ 0.2.0 – Add `RSpec` and `environment` tests, required `ruby` version updated (2.2.0 >=), `nokogiri` version updated (has a known critical severity security vulnerability in version range < 1.8.1)
 + 0.1.4 – Fix retry_authenticate and authenticated? methods (login details could not be saved after the retry_authenticate method)
 + 0.1.3 – Modernize multiple classes, add `ozet`, `hizmetler`, `musterino`, `kampanya`, `anlikborc` commands
 + 0.1.2 – Modernize Agent and Auth classes, ability to save user's encrypted login details, add `kota` command.
 + 0.1.1 – Build app skeleton, implement basic authentication
 + 0.1.0 - Initial version.
+
+### Development
+```bash
+bundle exec rspec -fd spec
+```
 
 ### Contributing
 

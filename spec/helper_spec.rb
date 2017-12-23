@@ -1,11 +1,11 @@
 RSpec.describe "environment" do
 
-  it "ruby version is >= 2.1.0" do
+  it "ruby version is >= 2.2.0" do
     expect(TurksatkabloCli::OnlineOperations::Helpers.check_ruby_version("2.4.2")).to be >= "2.1.0"
   end
 
-  it "ruby version is < 2.1.0" do
-    expect { TurksatkabloCli::OnlineOperations::Helpers.check_ruby_version("2.0.0") }.to raise_error(SystemExit)
+  it "ruby version is < 2.2.0" do
+    expect { TurksatkabloCli::OnlineOperations::Helpers.check_ruby_version("2.1.0") }.to raise_error(SystemExit)
   end
 
   it "phantomjs needs to be in path" do
