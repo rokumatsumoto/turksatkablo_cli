@@ -1,15 +1,9 @@
 require 'open3'
 require 'net/ping'
 
-
 module TurksatkabloCli
   module OnlineOperations
     module Helpers
-
-      def run(*commands)
-        stdin, stdout, stderr, w = Open3.popen3(*commands)
-        [stdout.gets(nil), stderr.gets(nil), w.value]
-      end
 
       def internet_connection?
         begin
@@ -41,6 +35,32 @@ module TurksatkabloCli
         puts "\n"
       end
 
+      def self.check_ruby_version(ruby_version = RUBY_VERSION)
+        if ruby_version < '2.1.0'
+          abort "turksatkablo_cli requires Ruby 2.1.0 or higher"
+        else
+          ruby_version
+        end
+      end
+
+      def self.check_is_installed?(command, err_msg)
+        if which(command)
+          true
+        else
+          abort(err_msg)
+        end
+      end
+
+      def self.which(command)
+        exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+        ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+          exts.each { |ext|
+            exe = File.join(path, "#{command}#{ext}")
+            return exe if File.executable?(exe) && !File.directory?(exe)
+          }
+        end
+        return nil
+      end
 
     end
   end

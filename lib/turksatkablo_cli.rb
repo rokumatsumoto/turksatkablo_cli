@@ -1,5 +1,3 @@
-require 'turksatkablo_cli/online_operations/helpers'
-require 'turksatkablo_cli/online_operations/enums'
 require 'turksatkablo_cli/online_operations/version'
 require 'turksatkablo_cli/base'
 require 'turksatkablo_cli/online_operations/agent'

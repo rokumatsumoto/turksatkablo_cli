@@ -22,6 +22,8 @@ module TurksatkabloCli
       define :KAMPANYA_ADI, "KAMPANYA ADI"
       define :TAAHHUT_BAS_TRH, "TAAHHÜT BAŞLANGIÇ TARİHİ"
       define :TAAHHUT_BIT_TRH, "TAAHHÜT BİTİŞ TARİHİ"
+
+      define :PHANTOM_JS_REQUIRED, "turksatkablo_cli requires phantomjs https://github.com/rokumatsumoto/turksatkablo_cli#setup"
     end
   end
 end

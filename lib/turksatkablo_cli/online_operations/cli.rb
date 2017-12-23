@@ -28,7 +28,7 @@ module TurksatkabloCli
       desc "kota", "Kalan kota - kısa kodu k"
       def kota
         if agent.authenticated?
-          puts @session.find(:css, "div.circle-container div.toplam span").text + " GB AKN Kaldı."
+          @session.find(:css, "div.circle-container div.toplam p").all("span, sub").map(&:text).each { |val| puts val }
         end
       end
       map "k" => "kota"

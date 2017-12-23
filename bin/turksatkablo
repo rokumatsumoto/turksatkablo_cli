@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 ## encoding: utf-8
 
-if RUBY_VERSION < '2.1.0'
-  abort "turksatkablo_cli requires Ruby 2.1.0 or higher"
-end
-
 lib_dir = File.expand_path("../../lib", __FILE__)
 $LOAD_PATH.unshift lib_dir if File.directory?(lib_dir)
+
+require 'turksatkablo_cli/online_operations/helpers'
+require 'turksatkablo_cli/online_operations/enums'
+
+TurksatkabloCli::OnlineOperations::Helpers.check_ruby_version
+TurksatkabloCli::OnlineOperations::Helpers.check_is_installed?("phantomjs", TurksatkabloCli::OnlineOperations::Enums::PHANTOM_JS_REQUIRED)
 
 require 'turksatkablo_cli'
 
@@ -20,11 +22,7 @@ end
 at_exit{
   # cleanup temp files
   # close open connections
-  begin
     Capybara.current_session.driver.quit
-  rescue Exception => e
-    abort "turksatkablo_cli requires phantomjs https://github.com/rokumatsumoto/turksatkablo_cli#setup"
-  end
 }
 
 TurksatkabloCli.main
