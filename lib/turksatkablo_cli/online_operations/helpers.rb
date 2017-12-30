@@ -1,27 +1,22 @@
-require 'open3'
 require 'net/ping'
 
 module TurksatkabloCli
   module OnlineOperations
     module Helpers
+      extend self
 
-      def internet_connection?
+      def internet_connection?(host = "8.8.8.8")
         begin
-          Net::Ping::External.new("8.8.8.8").ping?
+          Net::Ping::External.new(host).ping?
         rescue
-          false
+          nil
         end
       end
 
-      def add_commands
-
-        begin
-          Dir[File.expand_path(File.join('../..','online_operations', 'commands', '*.rb'), __FILE__)].each do |file|
-            require file
+      def require_all(_dir)
+          Dir[File.join(_dir, "**/*.rb")].each do |file|
+              require file
           end
-        rescue Exception => e
-        end
-
       end
 
       def agent
@@ -35,7 +30,7 @@ module TurksatkabloCli
         puts "\n"
       end
 
-      def self.check_ruby_version(ruby_version = RUBY_VERSION)
+      def check_ruby_version(ruby_version = RUBY_VERSION)
         if ruby_version < '2.2.0'
           abort "turksatkablo_cli requires Ruby 2.2.0 or higher"
         else
@@ -43,7 +38,7 @@ module TurksatkabloCli
         end
       end
 
-      def self.check_is_installed?(command, err_msg)
+      def check_is_installed?(command, err_msg)
         if which(command)
           true
         else
@@ -51,7 +46,7 @@ module TurksatkabloCli
         end
       end
 
-      def self.which(command)
+      def which(command)
         exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
         ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
           exts.each { |ext|

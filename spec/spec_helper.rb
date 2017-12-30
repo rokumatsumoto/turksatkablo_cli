@@ -1,11 +1,8 @@
 
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-
-require 'rspec'
 require 'turksatkablo_cli/online_operations/helpers'
 require 'turksatkablo_cli/online_operations/enums'
+require 'turksatkablo_cli/online_operations/version'
 
 module SpecHelper
 end
@@ -21,4 +18,7 @@ RSpec.configure do |config|
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.include(SpecHelper)
+
+  config.before(:suite) do
+  end
 end

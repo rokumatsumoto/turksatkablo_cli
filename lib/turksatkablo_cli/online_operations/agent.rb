@@ -18,7 +18,7 @@ module TurksatkabloCli
       end
 
       def has_logged_in?
-        agent.has_logged_in
+        self.has_logged_in
       end
 
       def authenticated?
@@ -126,14 +126,14 @@ module TurksatkabloCli
     private
     def set_login_data(auth)
       if auth.login_data.kind_of?(Hash) && !has_login_data?
-        agent.username = auth.login_data[:username]
-        agent.password = auth.login_data[:password]
-        agent.radio_btn_value = auth.login_data[:radio_btn_value]
+        self.username = auth.login_data[:username]
+        self.password = auth.login_data[:password]
+        self.radio_btn_value = auth.login_data[:radio_btn_value]
       end
     end
 
     def has_login_data?
-      if agent.username.nil? || agent.password.nil? || agent.radio_btn_value.nil?
+      if self.username.nil? || self.password.nil? || self.radio_btn_value.nil?
         false
       else
         true

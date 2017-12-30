@@ -5,6 +5,7 @@ module TurksatkabloCli
 
        desc  "donem", "Dönem takibi"
        def donem
+        puts "returns donem"
        end
 
     end

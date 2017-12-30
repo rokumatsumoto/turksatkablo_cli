@@ -4,7 +4,7 @@ require 'terminal-table'
 module TurksatkabloCli
   module OnlineOperations
     class Cli < Base
-      include TurksatkabloCli::OnlineOperations::Helpers
+      include Helpers
       include Thor::Actions
 
       # check_unknown_options!
