@@ -3,12 +3,11 @@ require 'turksatkablo_cli/base'
 require 'turksatkablo_cli/online_operations/agent'
 require 'turksatkablo_cli/online_operations/auth'
 require "init/poltergeist"
+require 'turksatkablo_cli/online_operations/commands/quota'
 
 module TurksatkabloCli
   class << self
     def main
-      TurksatkabloCli::OnlineOperations::Helpers.require_all("./lib/turksatkablo_cli/online_operations/commands")
-
       if !TurksatkabloCli::OnlineOperations::Helpers.internet_connection?
         abort 'İnternet bağlantınızı kontrol ediniz!'
         # Check your internet connection!

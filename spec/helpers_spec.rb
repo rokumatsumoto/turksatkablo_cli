@@ -53,10 +53,6 @@ context '#agent' do
   it 'initializes capybara session w/ poltergeist' do
     expect(subject.agent.session).to be_instance_of(Capybara::Session)
   end
-
-  it 'has 4 instance variables' do
-    expect(subject.agent.instance_variables.count).to be 4
-  end
 end
 
 context '#add_line' do

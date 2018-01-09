@@ -32,16 +32,19 @@ Verify the `turksatkablo` command is in your path by running it. You should see 
 $ turksatkablo
 Commands:
 turksatkablo anlikborc       # Anlık borç - kısa kodu b
+turksatkablo fatura TARIH    # Fatura göster ÖRN: 12.2017, ÖRN: 12.2017 pdf - kısa kodu f
+turksatkablo faturaliste     # Fatura listesi - kısa kodu fl
 turksatkablo help [COMMAND]  # Describe available commands or one specific command
 turksatkablo hizmet          # Mevcut hizmetler - kısa kodu h
 turksatkablo kampanya        # Kampanya bilgileri - kısa kodu ka
 turksatkablo kota            # Kalan kota - kısa kodu k
-turksatkablo kotadetay       # Son 3 ayın günlük takibi v.s
+turksatkablo kotadetay       # Son 3 ay kota kullanım - kısa kodu kd
 turksatkablo musterino       # Müşteri no - kısa kodu mn
 turksatkablo ozet            # Hizmetler genel durum - kısa kodu o
 ```
 
 ## Changelog
++ 0.3.0 – Add `Code coverage`, `Windows 10` support and `fatura TARIH`, `faturaliste`, `kotadetay donem` commands.
 + 0.2.0 – Add `RSpec` and `environment` tests, required `ruby` version updated (2.2.0 >=), `nokogiri` version updated (has a known critical severity security vulnerability in version range < 1.8.1)
 + 0.1.4 – Fix retry_authenticate and authenticated? methods (login details could not be saved after the retry_authenticate method)
 + 0.1.3 – Modernize multiple classes, add `ozet`, `hizmetler`, `musterino`, `kampanya`, `anlikborc` commands

@@ -1,5 +1,11 @@
 
 
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 require 'turksatkablo_cli/online_operations/helpers'
 require 'turksatkablo_cli/online_operations/enums'
 require 'turksatkablo_cli/online_operations/version'
