@@ -12,6 +12,13 @@ TurksatkabloCli::OnlineOperations::Helpers.check_is_installed?("phantomjs", Turk
 
 require 'turksatkablo_cli'
 
+if !TurksatkabloCli::OnlineOperations::Helpers.internet_connection?
+  abort 'İnternet bağlantınızı kontrol ediniz!'
+  # Check your internet connection!
+end
+
+TurksatkabloCli::OnlineOperations::Cli.start(ARGV)
+
 # catch control-c and exit
 trap("SIGINT") do
   Capybara.current_session.driver.quit
@@ -24,5 +31,3 @@ at_exit{
   # close open connections
     Capybara.current_session.driver.quit
 }
-
-TurksatkabloCli.main

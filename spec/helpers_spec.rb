@@ -29,7 +29,7 @@ context '#which' do
 end
 
 context '#require_all' do
-  before {described_class.require_all("./spec/support/required_all")}
+  before {subject.require_all("./spec/support/required_all")}
 
   it 'needed files' do
     notifier = class_double("ConsoleNotifier").as_stubbed_const
@@ -66,6 +66,9 @@ end
 context '#internet_connection?' do
   it 'returns false when blank address specified' do
     expect(subject.internet_connection?('')).to be_falsey
+  end
+  it 'returns nil when nil address specified' do
+    expect(subject.internet_connection?(nil)).to be_nil
   end
 end
 

@@ -44,6 +44,7 @@ turksatkablo ozet            # Hizmetler genel durum - kısa kodu o
 ```
 
 ## Changelog
++ 0.3.1 – Add tests for `TurksatkabloCli` and `Base` classes.
 + 0.3.0 – Add `Code coverage`, `Windows 10` support and `fatura TARIH`, `faturaliste`, `kotadetay donem` commands.
 + 0.2.0 – Add `RSpec` and `environment` tests, required `ruby` version updated (2.2.0 >=), `nokogiri` version updated (has a known critical severity security vulnerability in version range < 1.8.1)
 + 0.1.4 – Fix retry_authenticate and authenticated? methods (login details could not be saved after the retry_authenticate method)
