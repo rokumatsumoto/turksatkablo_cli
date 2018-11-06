@@ -17,25 +17,31 @@ module TurksatkabloCli
      desc "ozet", "Hizmetler genel durum - kısa kodu o"
      def ozet
        if agent.authenticated?
-         invoke :kota
+         invoke :kalankota
+         add_line
          invoke :musterino
+         add_line
          invoke :anlikborc
+         add_line
+         invoke :kampanya
+         add_line
+         invoke :kotaliste
        end
      end
      map "o" => "ozet"
 
-     desc "kota", "Kalan kota - kısa kodu k"
-     def kota
+     desc "kalankota", "Kalan kota - kısa kodu kk"
+     def kalankota
        if agent.authenticated?
          @session.find(:css, "div.circle-container div.toplam p").all("span, sub").map(&:text).each { |val| puts val }
        end
      end
-     map "k" => "kota"
+     map "kk" => "kalankota"
 
      desc "musterino", "Müşteri no - kısa kodu mn"
      def musterino
        if agent.authenticated?
-         puts @session.find(:css, "div.musteri div.musteri-id").text
+         puts @session.find(:css, "div.musteri div.musteri-id:nth-child(2)").text
 
        end
      end
@@ -51,12 +57,10 @@ module TurksatkabloCli
 
              rows = []
              services_td_list = @session.all(:css, 'table#hizmetTable tr td:nth-child(-n+4)').map(&:text)
-
              if services_td_list.size > 0
                (0..services_td_list.size).step(4) do |n|
                  rows << services_td_list[n...n+4]
                end
-
                table = Terminal::Table.new :headings => [Enums::HIZMET, Enums::HIZMET_TURU, Enums::HIZMET_DURUMU, Enums::TARIFE_TIPI], :rows => rows
                puts table
              else
@@ -160,7 +164,7 @@ module TurksatkabloCli
 
              end
            rescue Exception => e
-             puts 'Bir hata oluştu, mevcut bir faturanız bulunmamaktadır, fatura görüntüleme'
+             puts 'Mevcut bir faturanız bulunmamaktadır, fatura görüntüleme'
            end
          else
            puts "Fatura Bilgileri menüsüne şuan ulaşılamıyor."
@@ -200,15 +204,81 @@ module TurksatkabloCli
      end
      map "fl" => "faturaliste"
 
-       # default_task :ozet
+    # default_task :ozet
+
+    desc "kotaliste", "Son 3 ayın kota özeti - kısa kodu kl"
+    def kotaliste
+      if agent.authenticated?
+        visit_status = @session.visit(Enums::QUOTA_PERIOD)
+        if visit_status["status"] == 'success' && @session.current_url == Enums::QUOTA_PERIOD
+
+          # TODO: REFACTOR table helper
+          rows = []
+
+          periods_td_list = @session.all(:css, 'div.panel-default table.table tr td:nth-child(-n+4)').map(&:text)
+
+          if periods_td_list.size > 0
+            (0..periods_td_list.size).step(4) do |n|
+              rows << periods_td_list[n...n+4]
+            end
+
+            table = Terminal::Table.new :headings => [Enums::HIZMET_ID, Enums::DONEM, Enums::DOWNLOAD_KULLANIM, Enums::UPLOAD_KULLANIM], :rows => rows
+            puts table
+          else
+            puts "Hesabınıza tanımlı kota bilgisi bulunmamaktadır."
+          end
+
+        else
+          puts "Kota dönem takibi menüsüne şuan ulaşılamıyor."
+        end
+      end
+    end
+
+    map "kl" => "kotaliste"
+
+    desc "kota TARIH", "Kota detayı göster ÖRN: 12/2017, ÖRN: 12/2017"
+    def kota(tarih)
+      if agent.authenticated?
+       visit_status = @session.visit(Enums::QUOTA_PERIOD)
+       if visit_status["status"] == 'success' && @session.current_url == Enums::QUOTA_PERIOD
+        link_element = @session.find('tr', text: tarih).find('a:last-child')
+        if link_element != nil && link_element != ""
+          visit_url = link_element[:href]
+          if visit_url != nil && visit_url != ""
+           visit_status = @session.visit(visit_url)
+
+           # TODO: REFACTOR table helper
+           rows = []
+           if visit_status["status"] == 'success'
+            quota_td_list = @session.all(:css, 'div.panel-default table.table tr td:nth-child(-n+3)').map(&:text)
+
+            if quota_td_list.size > 0
+              (0..quota_td_list.size).step(3) do |n|
+                rows << quota_td_list[n...n+3]
+              end
+              table = Terminal::Table.new :headings => [Enums::DONEM, Enums::DOWNLOAD, Enums::UPLOAD], :rows => rows
+              puts table
+            else
+              puts "Girilen tarih sorgusu için kota detayı bulunamadı."
+            end
+          else
+            puts "Sistemsel bir sorun nedeniyle kota detayı bulunamadı."
+          end
+
+        else
+          puts "Sistemsel bir sorun nedeniyle kota detayı bulunamadı."
+        end
+      else
+        puts "Girilen tarih sorgusu için kota detayı bulunamadı."
+      end
+
+    end
+  end
+end
+map "k" => "kota"
 
 
-     desc "kotadetay", "Son 3 ay kota kullanım - kısa kodu kd"#son 3 ayın günlük takibi v.s"
-     subcommand 'kotadetay', Commands::Quota
-     map "kd" => "kotadetay"
-
-
-   end
- end
+end
+end
 end
 

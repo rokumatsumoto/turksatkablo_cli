@@ -40,21 +40,6 @@ context '#require_all' do
   end
 end
 
-context '#agent' do
-  before(:all) do
-    require 'turksatkablo_cli/online_operations/agent'
-    require 'init/poltergeist'
-  end
-
-  it 'returns instance of Agent' do
-    expect(subject.agent).to be_instance_of(TurksatkabloCli::OnlineOperations::Agent)
-  end
-
-  it 'initializes capybara session w/ poltergeist' do
-    expect(subject.agent.session).to be_instance_of(Capybara::Session)
-  end
-end
-
 context '#add_line' do
   it 'returns new line' do
     expect do

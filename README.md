@@ -2,6 +2,9 @@ Turksat Kablo CLI :black_medium_square:
 =================
 [![Gem Version](https://badge.fury.io/rb/turksatkablo_cli.svg)](https://badge.fury.io/rb/turksatkablo_cli)
 
+## THIS PROJECT IS DEPRECATED
+Turksat Kablo CLI is not maintained anymore. See [here #1](https://github.com/rokumatsumoto/turksatkablo_cli/issues/1) for more information.
+
 A command-line interface for the Turksat Kablo Online Islemler - https://online.turksatkablo.com.tr/
 
 

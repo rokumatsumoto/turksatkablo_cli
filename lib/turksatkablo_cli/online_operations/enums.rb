@@ -36,6 +36,9 @@ module TurksatkabloCli
       define :DOWNLOAD_KULLANIM, "DOWNLOAD KULLANIM"
       define :UPLOAD_KULLANIM, "UPLOAD KULLANIM"
 
+      define :DOWNLOAD, "DOWNLOAD"
+      define :UPLOAD, "UPLOAD"
+
 
       define :PHANTOM_JS_REQUIRED, "turksatkablo_cli requires phantomjs https://github.com/rokumatsumoto/turksatkablo_cli#setup"
     end

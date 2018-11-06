@@ -27,7 +27,12 @@ module TurksatkabloCli
     end
 
     def add_line
-      puts "\n"
+      puts
+    end
+
+    # test purposes
+    def current_time
+      puts Time.now
     end
 
     def check_ruby_version(ruby_version = RUBY_VERSION)

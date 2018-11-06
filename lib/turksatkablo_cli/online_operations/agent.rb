@@ -90,6 +90,17 @@ module TurksatkabloCli
         visit_status = @session.visit(Enums::BASE_URL)
 
         if visit_status["status"] == 'success' && @session.current_url == Enums::BASE_URL
+
+          begin
+            @session.find(:css, "div.g-recaptcha", visible: true)
+
+            puts "Giriş sayfasında Recaptcha https://tr.0wikipedia.org/wiki/ReCAPTCHA güvenlik doğrulaması gerektiriyor. Program sonlanıyor..."
+            exit!
+          rescue Capybara::ElementNotFound
+            true
+          end
+
+
           @fail_login_attempt = 0
           puts "#{Enums::BASE_URL} adresine erişim başarılı. Giriş yapılıyor..."
 
